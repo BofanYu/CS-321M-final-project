@@ -28,7 +28,8 @@ python -m pip install -r requirements.txt
 
 The analysis-only pipeline uses `numpy`, `pandas`, `scipy`, `scikit-learn`, and
 `matplotlib`. Agent generation also uses the OpenAI Python client against either
-OpenAI or an Ollama OpenAI-compatible local server.
+OpenAI or an Ollama OpenAI-compatible local server. To open or edit the optional
+notebook, install Jupyter separately with `python -m pip install jupyter`.
 
 For local Ollama runs, install Ollama separately and pull the model you plan to
 use, for example:
