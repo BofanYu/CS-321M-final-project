@@ -1,3 +1,10 @@
+"""Adapted pyrecodes Household Pulse Survey conversion helpers.
+
+Source: pyrecodes, BSD-3-Clause license. The project uses these helpers to map
+survey fields into the household metadata consumed by run_example6_agents.py.
+See ../../../THIRD_PARTY_NOTICES.md for attribution and license text.
+"""
+
 import copy
 import numpy as np
 import pandas as pd

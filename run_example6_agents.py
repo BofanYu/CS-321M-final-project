@@ -11,6 +11,8 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parent
 LOCAL_PYRECODES = PROJECT_ROOT / ".tmp_pyrecodes_main"
 if LOCAL_PYRECODES.exists():
+    # Uses a small local subset adapted from the BSD-3-Clause pyrecodes package.
+    # See THIRD_PARTY_NOTICES.md for attribution, license, and project-specific modifications.
     sys.path.insert(0, str(LOCAL_PYRECODES))
 
 from pyrecodes.household.convert_survey_to_household_info import convert_survey_to_household_info

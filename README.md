@@ -292,6 +292,18 @@ inputs let graders reproduce the analysis without repeating those LLM calls.
 - `run_all_analysis.py` is the end-to-end script that regenerates the reported
   analysis tables and figures from the prepared IRT inputs.
 
+## Attribution and Licenses
+
+Most project-specific code is original, including the IRT/K-factor analysis
+modules under `irt and k factors/src/disaster_irt/`, the reproducible analysis
+runner, and the project README.
+
+The household agent runner builds on a small local subset adapted from the
+external `pyrecodes` package under `.tmp_pyrecodes_main/pyrecodes/`. Those files
+are marked with module-level attribution comments/docstrings. The adapted
+package is licensed as BSD-3-Clause; see `THIRD_PARTY_NOTICES.md` for the source
+link, license text, and a list of project-specific modifications.
+
 ## Method Note
 
 The K-factor analysis is a fast residual-SVD extension on top of a 1PL-style

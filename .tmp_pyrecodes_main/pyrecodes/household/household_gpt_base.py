@@ -1,3 +1,11 @@
+"""Adapted pyrecodes household LLM base classes.
+
+Source: pyrecodes, BSD-3-Clause license. Project-specific changes include the
+OpenAI-compatible Ollama backend, context-only prompt handling for local models,
+retry/error handling, and more robust extraction of the final decision label.
+See ../../../THIRD_PARTY_NOTICES.md for attribution and license text.
+"""
+
 import ast
 import asyncio
 import copy

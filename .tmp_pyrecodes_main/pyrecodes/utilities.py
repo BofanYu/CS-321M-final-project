@@ -1,3 +1,10 @@
+"""Adapted pyrecodes utility helpers.
+
+Source: pyrecodes, BSD-3-Clause license. This local copy keeps the JSON and
+small utility functions needed by the household-agent workflow; geometry
+helpers lazily import optional dependencies. See ../../THIRD_PARTY_NOTICES.md.
+"""
+
 import json
 import importlib
 from typing import Union

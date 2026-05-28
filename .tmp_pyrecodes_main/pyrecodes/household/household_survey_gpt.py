@@ -1,3 +1,10 @@
+"""Adapted pyrecodes survey household agent.
+
+Source: pyrecodes, BSD-3-Clause license. This local subset is modified for the
+binary displacement-duration experiment and the prompt templates bundled in
+this repository. See ../../../THIRD_PARTY_NOTICES.md for attribution details.
+"""
+
 from enum import Enum
 
 from pyrecodes.household.household_gpt_base import HOUSEHOLD_DIR, HouseholdGPTBase
