@@ -14,7 +14,6 @@ if LOCAL_PYRECODES.exists():
     sys.path.insert(0, str(LOCAL_PYRECODES))
 
 from pyrecodes.household.convert_survey_to_household_info import convert_survey_to_household_info
-from pyrecodes.household.household_survey_gpt import HouseholdSurveyGPT
 
 
 HOUSEHOLD_INFO_TEMPLATE = {
@@ -41,6 +40,7 @@ HOUSEHOLD_INFO_TEMPLATE = {
 
 
 def conditions_to_include_household_met(household_info):
+    """Return True when a survey row has all fields needed for prompting."""
     if household_info["BuildingDamage"] is None:
         return False
     if household_info["DisplacementDuration"] is None:
@@ -53,6 +53,8 @@ def conditions_to_include_household_met(household_info):
         return False
     if household_info["UnsanitaryConditions"] is None:
         return False
+    if household_info["DisasterType"] is None:
+        return False
     if len(household_info["DisasterType"]) != 1:
         return False
     for value in household_info["SocioEconomicParameters"].values():
@@ -62,6 +64,10 @@ def conditions_to_include_household_met(household_info):
 
 
 def prepare_households(survey_csv):
+    """Load the survey CSV and convert usable displaced rows to household dicts."""
+    survey_csv = Path(survey_csv)
+    if not survey_csv.exists():
+        raise FileNotFoundError(f"Survey CSV not found: {survey_csv}")
     household_pulse_survey_df = pd.read_csv(survey_csv)
     households_info = []
 
@@ -79,6 +85,11 @@ def prepare_households(survey_csv):
 
 
 def select_households(households_info, sample_size, seed, start, limit):
+    """Select a reproducible subset of households for chunked or smoke-test runs."""
+    if start < 0:
+        raise ValueError(f"start must be non-negative, got {start}")
+    if limit is not None and limit < 0:
+        raise ValueError(f"limit must be non-negative, got {limit}")
     random.seed(seed)
     if sample_size == "all":
         selected = list(households_info)
@@ -96,12 +107,14 @@ def select_households(households_info, sample_size, seed, start, limit):
 
 
 def map_actual_duration_to_decision(actual):
+    """Map the survey displacement duration text to the binary decision label."""
     if "Less than a week" in actual:
         return "LeaveHomeForLessThanAWeek"
     return "LeaveHomeForMoreThanAWeek"
 
 
 def save_results(results, output_path):
+    """Atomically write a result dictionary as formatted JSON."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
     tmp_path = output_path.with_suffix(output_path.suffix + ".tmp")
     with tmp_path.open("w", encoding="utf-8") as f:
@@ -110,6 +123,7 @@ def save_results(results, output_path):
 
 
 def save_checkpoint(results, output_path, checkpoint_dir, processed_count):
+    """Write an optional checkpoint snapshot for long-running LLM jobs."""
     if checkpoint_dir is None:
         return
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -118,6 +132,7 @@ def save_checkpoint(results, output_path, checkpoint_dir, processed_count):
 
 
 def run(args):
+    """Run household agents and save raw decisions plus metadata."""
     survey_csv = Path(args.survey_csv)
     output_path = Path(args.output)
 
@@ -169,6 +184,8 @@ def run(args):
             actual = household_info["DisplacementDuration"]
             actual_mapped = map_actual_duration_to_decision(actual)
             if args.mock_decision is None:
+                from pyrecodes.household.household_survey_gpt import HouseholdSurveyGPT
+
                 agent = HouseholdSurveyGPT()
                 agent.set_parameters(
                     household_info,
@@ -250,6 +267,7 @@ def run(args):
 
 
 def parse_args():
+    """Parse command-line options for household agent generation."""
     parser = argparse.ArgumentParser(description="Run pyrecodes Example 6 household agents without plotting.")
     parser.add_argument("--survey-csv", default="household_pulse_survey_displaced.csv")
     parser.add_argument("--output", default="results_example6_agents.json")

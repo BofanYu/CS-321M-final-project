@@ -20,7 +20,7 @@ def plot_ability(ability: pd.DataFrame, path: Path, top_n: Optional[int] = None)
         df = df.tail(top_n)
     fig, ax = plt.subplots(figsize=(8, max(4, 0.35 * len(df))))
     ax.barh(df["model"], df["ability"])
-    ax.set_xlabel("IRT ability θ")
+    ax.set_xlabel("IRT ability theta")
     ax.set_ylabel("Model / prompt condition")
     ax.set_title("1PL/Rasch model ability")
     _save(fig, path)
@@ -33,7 +33,7 @@ def plot_accuracy_vs_ability(ability: pd.DataFrame, path: Path):
     for _, r in df.iterrows():
         ax.annotate(r["model"], (r["accuracy"], r["ability"]), fontsize=7, alpha=0.8)
     ax.set_xlabel("Observed accuracy")
-    ax.set_ylabel("IRT ability θ")
+    ax.set_ylabel("IRT ability theta")
     ax.set_title("Accuracy vs. IRT ability")
     _save(fig, path)
 
